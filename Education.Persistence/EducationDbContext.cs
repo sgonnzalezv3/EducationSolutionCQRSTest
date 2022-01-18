@@ -10,12 +10,27 @@ namespace Education.Persistence
 {
     public class EducationDbContext : DbContext
     {
+        public EducationDbContext()
+        {
+
+        }
         public EducationDbContext(DbContextOptions<EducationDbContext> options) : base(options)
         {
 
         }
 
         public DbSet<Curso> Cursos { get; set; }
+
+        /* Este metodo va hacer que , va atraer una cadena de conexion temporal hasta que no ejecute la aplicacion Education.Api  */
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            /* si el api aun no te da la cadena de conexion, seteame tu la cadena */
+            if (!options.IsConfigured)
+            {
+                options.UseSqlServer("Server=.;database=Education;Trusted_Connection=True;MultipleActiveResultSets=True;");
+            }
+        }
+
 
         /* Inicializar valores prueba */
         /* Esto ocurre cuando se ejecuta el proceso de migracion */
